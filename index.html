@@ -87,8 +87,8 @@
 <script>
     var count = 0;
     var intervalId = null;
-    const beatsPerMinute = 65;
-    const beatInterval = 60000 / beatsPerMinute; // Calculate the interval between beats
+    var beatsPerMinute = 65;
+    var beatInterval = 60000 / beatsPerMinute; // Calculate the interval between beats
 
     function showAlert(day) {
         if (Math.random() < 0.5) {
@@ -103,6 +103,15 @@
         document.getElementById("counter").textContent = count;
         if (count === 100) {
             alert("Congrats! You've reached 100.");
+        }
+        // Increase the beats per minute by 1 for every 10 counts
+        if (count % 10 === 0) {
+            beatsPerMinute++;
+            beatInterval = 60000 / beatsPerMinute;
+            if (intervalId !== null) {
+                clearInterval(intervalId);
+                intervalId = setInterval(playClick, beatInterval);
+            }
         }
     }
 
