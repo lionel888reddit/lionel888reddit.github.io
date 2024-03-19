@@ -99,30 +99,6 @@
         }
     }
 
-    function updateCounter() {
-        count++;
-        counterElement.textContent = count;
-        if (count === 100) {
-            alert("Congrats! You've reached 100.");
-        }
-        // Increase the beats per minute by 10 every 10 counts
-        if (count % 10 === 0 && count <= 90) {
-            beatsPerMinute += 10;
-            if (intervalId !== null && isMetronomeRunning) {
-                clearInterval(intervalId);
-                intervalId = setInterval(playClick, 60000 / beatsPerMinute);
-            }
-        }
-        // Drastically increase BPM to 200 for the last 10 counts
-        if (count > 90 && count <= 100) {
-            beatsPerMinute = 200;
-            if (intervalId !== null && isMetronomeRunning) {
-                clearInterval(intervalId);
-                intervalId = setInterval(playClick, 60000 / beatsPerMinute);
-            }
-        }
-    }
-
     function toggleMetronome() {
         if (isMetronomeRunning) {
             stopMetronome();
@@ -135,10 +111,7 @@
 
     function startMetronome() {
         updateCounter(); // Update the counter immediately
-        intervalId = setInterval(function() {
-            playClick();
-            updateCounter();
-        }, 60000 / beatsPerMinute);
+        intervalId = setInterval(playSoundAndUpdateCounter, 60000 / beatsPerMinute);
         document.querySelector('.metronome-container button').textContent = 'Stop Metronome';
     }
 
@@ -146,6 +119,30 @@
         clearInterval(intervalId);
         intervalId = null;
         document.querySelector('.metronome-container button').textContent = 'Start Metronome';
+    }
+
+    function playSoundAndUpdateCounter() {
+        playClick();
+        updateCounter();
+    }
+
+    function updateCounter() {
+        count++;
+        counterElement.textContent = count;
+        if (count === 100) {
+            alert("Congrats! You've reached 100.");
+        }
+        // Increase the beats per minute by 10 every 10 counts
+        if (count % 10 === 0 && count <= 90) {
+            beatsPerMinute += 10;
+        }
+        // Drastically increase BPM to 200 for the last 10 counts
+        if (count > 90 && count <= 100) {
+            beatsPerMinute = 200;
+            if (count <= 100) {
+                speak(10 - (count - 90)); // Speak out the countdown
+            }
+        }
     }
 
     function playClick() {
@@ -162,6 +159,16 @@
         oscillator.start();
         gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5); // Fade out over 0.5 seconds
         oscillator.stop(audioContext.currentTime + 0.5); // Stop oscillator after 0.5 seconds
+    }
+
+    function speak(number) {
+        var msg = new SpeechSynthesisUtterance();
+        msg.text = number;
+        msg.volume = 1; // 0 to 1
+        msg.rate = 1; // 0.1 to 10
+        msg.pitch = 1; // 0 to 2
+        msg.lang = 'en-US';
+        speechSynthesis.speak(msg);
     }
 </script>
 
