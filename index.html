@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Table with Fancy Buttons and Counter</title>
+    <title>Table with Fancy Buttons, Counter, and Metronome</title>
     <style>
         /* General styling */
         body {
@@ -11,6 +11,8 @@
             margin: 0;
             padding: 0;
             background-color: #f0f0f0;
+            text-align: center;
+            padding-top: 20px; /* Adjusted padding */
         }
 
         /* Table and button styling */
@@ -26,7 +28,8 @@
         }
 
         button {
-            padding: 10px 20px;
+            padding: 15px 30px; /* Increased padding */
+            font-size: 18px; /* Increased font size */
             background-color: #4CAF50;
             color: white;
             border: none;
@@ -47,22 +50,14 @@
         .day6 { background-color: #2196F3; }
         .day7 { background-color: #03A9F4; }
 
-        /* Counter styling */
+        /* Counter and Metronome styling */
         .counter-container {
             text-align: center;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         .counter {
             font-size: 24px;
-        }
-
-        /* iPhone specific styling */
-        @media only screen and (max-width: 600px) {
-            button {
-                padding: 8px 16px;
-                font-size: 14px;
-            }
         }
     </style>
 </head>
@@ -85,8 +80,15 @@
     <div class="counter" id="counter">0</div>
 </div>
 
+<div class="metronome-container">
+    <button onclick="startMetronome()">Start Metronome</button>
+</div>
+
 <script>
     var count = 0;
+    var intervalId = null;
+    const beatsPerMinute = 65;
+    const beatInterval = 60000 / beatsPerMinute; // Calculate the interval between beats
 
     function showAlert(day) {
         if (Math.random() < 0.5) {
@@ -99,6 +101,24 @@
     function updateCounter() {
         count++;
         document.getElementById("counter").textContent = count;
+        if (count === 100) {
+            alert("Congrats! You've reached 100.");
+        }
+    }
+
+    function startMetronome() {
+        if (intervalId === null) {
+            intervalId = setInterval(playClick, beatInterval);
+        } else {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+    }
+
+    function playClick() {
+        // You can replace this with your preferred sound
+        const clickSound = new Audio("https://www.soundjay.com/button/beep-07.wav");
+        clickSound.play();
     }
 </script>
 
