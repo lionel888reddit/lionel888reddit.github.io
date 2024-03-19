@@ -76,7 +76,6 @@
 </table>
 
 <div class="counter-container">
-    <button onclick="updateCounter()">Click Me</button>
     <div class="counter" id="counter">0</div>
 </div>
 
@@ -90,6 +89,7 @@
     var beatsPerMinute = 65;
     var beatInterval = 60000 / beatsPerMinute; // Calculate the interval between beats
     var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    var counterElement = document.getElementById("counter");
 
     function showAlert(day) {
         if (Math.random() < 0.5) {
@@ -101,7 +101,7 @@
 
     function updateCounter() {
         count++;
-        document.getElementById("counter").textContent = count;
+        counterElement.textContent = count;
         if (count === 100) {
             alert("Congrats! You've reached 100.");
         }
@@ -118,7 +118,11 @@
 
     function startMetronome() {
         if (intervalId === null) {
-            intervalId = setInterval(playClick, beatInterval);
+            updateCounter(); // Update the counter immediately
+            intervalId = setInterval(function() {
+                playClick();
+                updateCounter();
+            }, beatInterval);
         } else {
             clearInterval(intervalId);
             intervalId = null;
@@ -127,10 +131,18 @@
 
     function playClick() {
         var oscillator = audioContext.createOscillator();
-        oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // Set the frequency (440 Hz = A4)
-        oscillator.connect(audioContext.destination);
+        var gainNode = audioContext.createGain();
+        
+        oscillator.type = "sine"; // Set oscillator type to sine wave for bass-like sound
+        oscillator.frequency.setValueAtTime(100, audioContext.currentTime); // Set lower frequency for bass-like sound
+        gainNode.gain.setValueAtTime(1, audioContext.currentTime); // Set volume
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
         oscillator.start();
-        oscillator.stop(audioContext.currentTime + 0.1); // Play the tone for 0.1 seconds
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5); // Fade out over 0.5 seconds
+        oscillator.stop(audioContext.currentTime + 0.5); // Stop oscillator after 0.5 seconds
     }
 </script>
 
