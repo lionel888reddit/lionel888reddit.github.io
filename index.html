@@ -3,53 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page</title>
+    <title>Table with Fancy Buttons</title>
     <style>
-        /* Basic styling */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
         }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
+
+        td {
+            padding: 10px;
             text-align: center;
         }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-        .content {
-            background-color: #fff;
-            padding: 20px;
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .day1 { background-color: #F44336; }
+        .day2 { background-color: #E91E63; }
+        .day3 { background-color: #9C27B0; }
+        .day4 { background-color: #673AB7; }
+        .day5 { background-color: #3F51B5; }
+        .day6 { background-color: #2196F3; }
+        .day7 { background-color: #03A9F4; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Testing</h1>
-</header>
+<table border="1">
+    <tr>
+        <td class="day1"><button onclick="showAlert(1)">Day 1</button></td>
+        <td class="day2"><button onclick="showAlert(2)">Day 2</button></td>
+        <td class="day3"><button onclick="showAlert(3)">Day 3</button></td>
+        <td class="day4"><button onclick="showAlert(4)">Day 4</button></td>
+        <td class="day5"><button onclick="showAlert(5)">Day 5</button></td>
+        <td class="day6"><button onclick="showAlert(6)">Day 6</button></td>
+        <td class="day7"><button onclick="showAlert(7)">Day 7</button></td>
+    </tr>
+</table>
 
-<div class="container">
-    <div class="content">
-        <h2>About Me</h2>
-        <p>Welcome to page! I'm passionate about you.</p>
-        <h2>Projects</h2>
-        <ul>
-            <li><a href="#">Project 1</a></li>
-            <li><a href="#">Project 2</a></li>
-            <li><a href="#">Project 3</a></li>
-        </ul>
-        <h2>Contact</h2>
-    </div>
-</div>
+<script>
+    function showAlert(day) {
+        alert("Day " + day);
+    }
+</script>
 
 </body>
 </html>
