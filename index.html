@@ -105,6 +105,14 @@
         if (count === 100) {
             alert("Congrats! You've reached 100.");
         }
+        // Increase the beats per minute by 10 every 10 counts
+        if (count % 10 === 0) {
+            beatsPerMinute += 10;
+            if (intervalId !== null && isMetronomeRunning) {
+                clearInterval(intervalId);
+                intervalId = setInterval(playClick, 60000 / beatsPerMinute);
+            }
+        }
     }
 
     function toggleMetronome() {
