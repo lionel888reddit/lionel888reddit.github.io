@@ -106,8 +106,16 @@
             alert("Congrats! You've reached 100.");
         }
         // Increase the beats per minute by 10 every 10 counts
-        if (count % 10 === 0) {
+        if (count % 10 === 0 && count <= 90) {
             beatsPerMinute += 10;
+            if (intervalId !== null && isMetronomeRunning) {
+                clearInterval(intervalId);
+                intervalId = setInterval(playClick, 60000 / beatsPerMinute);
+            }
+        }
+        // Drastically increase BPM to 200 for the last 10 counts
+        if (count > 90 && count <= 100) {
+            beatsPerMinute = 200;
             if (intervalId !== null && isMetronomeRunning) {
                 clearInterval(intervalId);
                 intervalId = setInterval(playClick, 60000 / beatsPerMinute);
