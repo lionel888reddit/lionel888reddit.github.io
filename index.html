@@ -87,7 +87,6 @@
     var count = 0;
     var intervalId = null;
     var beatsPerMinute = 65;
-    var beatInterval = 60000 / beatsPerMinute; // Calculate the interval between beats
     var audioContext = new (window.AudioContext || window.webkitAudioContext)();
     var counterElement = document.getElementById("counter");
     var isMetronomeRunning = false;
@@ -106,17 +105,6 @@
         if (count === 100) {
             alert("Congrats! You've reached 100.");
         }
-        // Increase the beats per minute by 10 for the first 90 counts
-        if (count <= 90) {
-            beatsPerMinute += 10;
-        } else if (count > 90 && count <= 100) { // Drastically increase BPM to 200 for the last 10 counts
-            beatsPerMinute = 200;
-        }
-        beatInterval = 60000 / beatsPerMinute; // Recalculate the beat interval
-        if (intervalId !== null && isMetronomeRunning) {
-            clearInterval(intervalId);
-            intervalId = setInterval(playClick, beatInterval);
-        }
     }
 
     function toggleMetronome() {
@@ -134,7 +122,7 @@
         intervalId = setInterval(function() {
             playClick();
             updateCounter();
-        }, beatInterval);
+        }, 60000 / beatsPerMinute);
         document.querySelector('.metronome-container button').textContent = 'Stop Metronome';
     }
 
@@ -145,20 +133,20 @@
     }
 
     function playClick() {
-    var oscillator = audioContext.createOscillator();
-    var gainNode = audioContext.createGain();
-    
-    oscillator.type = "triangle"; // Set oscillator type to triangle wave for a sharper sound
-    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime); // Set higher frequency for a sharper snap-like sound
-    gainNode.gain.setValueAtTime(1, audioContext.currentTime); // Set volume
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    oscillator.start();
-    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1); // Fade out over 0.1 seconds for a quick snap
-    oscillator.stop(audioContext.currentTime + 0.1); // Stop oscillator after 0.1 seconds
-}
+        var oscillator = audioContext.createOscillator();
+        var gainNode = audioContext.createGain();
+        
+        oscillator.type = "sine"; // Set oscillator type to sine wave for bass-like sound
+        oscillator.frequency.setValueAtTime(100, audioContext.currentTime); // Set lower frequency for bass-like sound
+        gainNode.gain.setValueAtTime(1, audioContext.currentTime); // Set volume
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.start();
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5); // Fade out over 0.5 seconds
+        oscillator.stop(audioContext.currentTime + 0.5); // Stop oscillator after 0.5 seconds
+    }
 </script>
 
 </body>
