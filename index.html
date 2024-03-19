@@ -37,6 +37,14 @@
         .day5 { background-color: #3F51B5; }
         .day6 { background-color: #2196F3; }
         .day7 { background-color: #03A9F4; }
+
+        /* Responsive CSS */
+        @media only screen and (max-width: 600px) {
+            button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -55,7 +63,11 @@
 
 <script>
     function showAlert(day) {
-        alert("Day " + day);
+        if (Math.random() < 0.5) {
+            alert("You get a reward");
+        } else {
+            alert("Aww no reward");
+        }
     }
 </script>
 
