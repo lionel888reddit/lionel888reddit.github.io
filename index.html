@@ -89,6 +89,7 @@
     var intervalId = null;
     var beatsPerMinute = 65;
     var beatInterval = 60000 / beatsPerMinute; // Calculate the interval between beats
+    var audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
     function showAlert(day) {
         if (Math.random() < 0.5) {
@@ -125,9 +126,11 @@
     }
 
     function playClick() {
-        // You can replace this with your preferred sound
-        const clickSound = new Audio("https://www.soundjay.com/button/beep-07.wav");
-        clickSound.play();
+        var oscillator = audioContext.createOscillator();
+        oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // Set the frequency (440 Hz = A4)
+        oscillator.connect(audioContext.destination);
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.1); // Play the tone for 0.1 seconds
     }
 </script>
 
