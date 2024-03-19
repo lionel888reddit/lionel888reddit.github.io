@@ -80,16 +80,17 @@
 </div>
 
 <div class="metronome-container">
-    <button onclick="startMetronome()">Start Metronome</button>
+    <button onclick="toggleMetronome()">Start Metronome</button>
 </div>
 
 <script>
     var count = 0;
     var intervalId = null;
-    var beatsPerMinute = 65;
+    var beatsPerMinute = 120; // Increased beats per minute to 120
     var beatInterval = 60000 / beatsPerMinute; // Calculate the interval between beats
     var audioContext = new (window.AudioContext || window.webkitAudioContext)();
     var counterElement = document.getElementById("counter");
+    var isMetronomeRunning = false;
 
     function showAlert(day) {
         if (Math.random() < 0.5) {
@@ -109,24 +110,36 @@
         if (count % 10 === 0) {
             beatsPerMinute++;
             beatInterval = 60000 / beatsPerMinute;
-            if (intervalId !== null) {
+            if (intervalId !== null && isMetronomeRunning) {
                 clearInterval(intervalId);
                 intervalId = setInterval(playClick, beatInterval);
             }
         }
     }
 
-    function startMetronome() {
-        if (intervalId === null) {
-            updateCounter(); // Update the counter immediately
-            intervalId = setInterval(function() {
-                playClick();
-                updateCounter();
-            }, beatInterval);
+    function toggleMetronome() {
+        if (isMetronomeRunning) {
+            stopMetronome();
+            isMetronomeRunning = false;
         } else {
-            clearInterval(intervalId);
-            intervalId = null;
+            startMetronome();
+            isMetronomeRunning = true;
         }
+    }
+
+    function startMetronome() {
+        updateCounter(); // Update the counter immediately
+        intervalId = setInterval(function() {
+            playClick();
+            updateCounter();
+        }, beatInterval);
+        document.querySelector('.metronome-container button').textContent = 'Stop Metronome';
+    }
+
+    function stopMetronome() {
+        clearInterval(intervalId);
+        intervalId = null;
+        document.querySelector('.metronome-container button').textContent = 'Start Metronome';
     }
 
     function playClick() {
