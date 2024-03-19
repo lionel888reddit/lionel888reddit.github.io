@@ -86,7 +86,7 @@
 <script>
     var count = 0;
     var intervalId = null;
-    var beatsPerMinute = 120; // Increased beats per minute to 120
+    var beatsPerMinute = 65;
     var beatInterval = 60000 / beatsPerMinute; // Calculate the interval between beats
     var audioContext = new (window.AudioContext || window.webkitAudioContext)();
     var counterElement = document.getElementById("counter");
@@ -106,14 +106,16 @@
         if (count === 100) {
             alert("Congrats! You've reached 100.");
         }
-        // Increase the beats per minute by 1 for every 10 counts
-        if (count % 10 === 0) {
-            beatsPerMinute++;
-            beatInterval = 60000 / beatsPerMinute;
-            if (intervalId !== null && isMetronomeRunning) {
-                clearInterval(intervalId);
-                intervalId = setInterval(playClick, beatInterval);
-            }
+        // Increase the beats per minute by 10 for the first 90 counts
+        if (count <= 90) {
+            beatsPerMinute += 10;
+        } else if (count > 90 && count <= 100) { // Drastically increase BPM to 200 for the last 10 counts
+            beatsPerMinute = 200;
+        }
+        beatInterval = 60000 / beatsPerMinute; // Recalculate the beat interval
+        if (intervalId !== null && isMetronomeRunning) {
+            clearInterval(intervalId);
+            intervalId = setInterval(playClick, beatInterval);
         }
     }
 
