@@ -135,6 +135,8 @@
         // Increase the beats per minute by 10 every 10 counts
         if (count % 10 === 0 && count <= 90) {
             beatsPerMinute += 10;
+            clearInterval(intervalId);
+            intervalId = setInterval(playSoundAndUpdateCounter, 60000 / beatsPerMinute); // Update interval
         }
         // Drastically increase BPM to 200 for the last 10 counts
         if (count > 90 && count <= 100) {
@@ -142,8 +144,6 @@
                 speak(10 - (count - 90)); // Speak out the countdown
             }
         }
-        clearInterval(intervalId);
-        intervalId = setInterval(playSoundAndUpdateCounter, 60000 / beatsPerMinute); // Update interval
     }
 
     function playClick() {
