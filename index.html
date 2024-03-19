@@ -3,8 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Table with Fancy Buttons</title>
+    <title>Table with Fancy Buttons and Counter</title>
     <style>
+        /* General styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        /* Table and button styling */
         table {
             border-collapse: collapse;
             width: 100%;
@@ -38,7 +47,17 @@
         .day6 { background-color: #2196F3; }
         .day7 { background-color: #03A9F4; }
 
-        /* Responsive CSS */
+        /* Counter styling */
+        .counter-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .counter {
+            font-size: 24px;
+        }
+
+        /* iPhone specific styling */
         @media only screen and (max-width: 600px) {
             button {
                 padding: 8px 16px;
@@ -61,13 +80,25 @@
     </tr>
 </table>
 
+<div class="counter-container">
+    <button onclick="updateCounter()">Click Me</button>
+    <div class="counter" id="counter">0</div>
+</div>
+
 <script>
+    var count = 0;
+
     function showAlert(day) {
         if (Math.random() < 0.5) {
             alert("You get a reward");
         } else {
-            alert("Aww no reward");
+            alert("Day " + day);
         }
+    }
+
+    function updateCounter() {
+        count++;
+        document.getElementById("counter").textContent = count;
     }
 </script>
 
